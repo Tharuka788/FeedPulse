@@ -17,7 +17,7 @@ export const createFeedback = async (req: Request, res: Response) => {
             title,
             description,
             category,
-            status: 'pending'
+            status: 'New'
         });
 
         // Trigger AI analysis asynchronously

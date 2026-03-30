@@ -29,7 +29,8 @@ export default function FeedbackForm() {
         setErrorMessage('');
 
         try {
-            const response = await fetch('http://localhost:4000/api/feedback', {
+            const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+            const response = await fetch(`${apiBaseUrl}/api/feedback`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ title, description, category }),

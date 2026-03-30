@@ -2,15 +2,43 @@ import type { Request, Response } from 'express';
 import Feedback from '../models/Feedback.js';
 import { analyzeFeedback } from '../services/gemini.service.js';
 
+// Helper to sanitize input (strip HTML/Script tags)
+const sanitizeInput = (text: string): string => {
+    if (typeof text !== 'string') return '';
+    // Basic regex to remove HTML/Script tags
+    return text.replace(/<[^>]*>?/gm, '').trim();
+};
+
+const CATEGORIES = ['Bug', 'Feature Request', 'Improvement', 'Other'];
+
 // @desc    Create new feedback
 // @route   POST /api/feedback
 // @access  Public
 export const createFeedback = async (req: Request, res: Response) => {
     try {
-        const { title, description, category } = req.body;
+        let { title, description, category } = req.body;
 
+        // 1. Required Field Validation
         if (!title || !description || !category) {
-            return res.status(400).json({ message: 'Please provide all required fields (title, description, category)' });
+            return res.status(400).json({ 
+                message: 'Validation Failure: title, description, and category are required' 
+            });
+        }
+
+        // 2. Input Sanitization (Remove malicious scripts/tags)
+        title = sanitizeInput(title);
+        description = sanitizeInput(description);
+
+        // 3. Strict Field Validation
+        if (title.length < 3 || description.length < 20) {
+            return res.status(400).json({ 
+                message: 'Invalid input: Title must be min 3 characters and Description min 20' 
+            });
+        }
+
+        // 4. Category Validation
+        if (!CATEGORIES.includes(category)) {
+            return res.status(400).json({ message: `Invalid category. Must be one of: ${CATEGORIES.join(', ')}` });
         }
 
         const feedback = await Feedback.create({
@@ -25,9 +53,11 @@ export const createFeedback = async (req: Request, res: Response) => {
             console.error('AI Analysis Trigger Error:', err);
         });
 
+        // 201 Created for successful submissions
         res.status(201).json(feedback);
     } catch (error: any) {
-        res.status(500).json({ message: error.message });
+        // 500 Internal Server Error for system failures
+        res.status(500).json({ message: 'Internal Server Error: ' + error.message });
     }
 };
 
@@ -57,8 +87,11 @@ export const updateFeedbackStatus = async (req: Request, res: Response) => {
         const { status } = req.body;
         const { id } = req.params;
 
+        // Admin Status Update: strictly verify the values
         if (!status || !['New', 'In Review', 'Resolved'].includes(status)) {
-            return res.status(400).json({ message: 'Invalid status provided' });
+            return res.status(400).json({ 
+                message: 'Invalid status. Must be strictly New, In Review, or Resolved' 
+            });
         }
 
         const feedback = await Feedback.findByIdAndUpdate(
@@ -73,7 +106,7 @@ export const updateFeedbackStatus = async (req: Request, res: Response) => {
 
         res.status(200).json(feedback);
     } catch (error: any) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: 'System failure: ' + error.message });
     }
 };
 

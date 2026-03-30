@@ -60,7 +60,8 @@ export default function AdminDashboard() {
         setIsLoading(true);
         try {
             const token = localStorage.getItem('adminToken');
-            let url = 'http://localhost:4000/api/feedback?';
+            const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+            let url = `${apiBaseUrl}/api/feedback?`;
             if (filterCategory !== 'All') url += `category=${filterCategory}&`;
             if (filterStatus !== 'All') url += `status=${filterStatus}&`;
 
@@ -94,7 +95,8 @@ export default function AdminDashboard() {
         setIsUpdating(id);
         try {
             const token = localStorage.getItem('adminToken');
-            const response = await fetch(`http://localhost:4000/api/feedback/${id}/status`, {
+            const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+            const response = await fetch(`${apiBaseUrl}/api/feedback/${id}/status`, {
                 method: 'PATCH',
                 headers: { 
                     'Content-Type': 'application/json',
@@ -118,7 +120,8 @@ export default function AdminDashboard() {
 
         try {
             const token = localStorage.getItem('adminToken');
-            const response = await fetch(`http://localhost:4000/api/feedback/${id}`, {
+            const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+            const response = await fetch(`${apiBaseUrl}/api/feedback/${id}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
             });

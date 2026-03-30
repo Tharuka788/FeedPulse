@@ -12,6 +12,7 @@ export interface IFeedback extends Document {
         tags: string[];
         summary: string;
     };
+    aiProcessed: boolean;
     user?: mongoose.Types.ObjectId;
     createdAt: Date;
     updatedAt: Date;
@@ -33,6 +34,7 @@ const FeedbackSchema: Schema = new Schema({
         tags: [{ type: String }],
         summary: { type: String }
     },
+    aiProcessed: { type: Boolean, default: false },
     user: { type: Schema.Types.ObjectId, ref: 'User' },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }

@@ -18,7 +18,7 @@ services:
       - "4000:4000"
     environment:
       - MONGO_URI=mongodb://mongo:27017/feedpulse
-      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GEMINI_API_KEY=AIzaSyDUvb1pUj4wYcGg_y8DpR8Q-2XoJn1YqXU
       - JWT_SECRET=feedpulse_secret_key_2026
       - ADMIN_EMAIL=admin@feedpulse.com
       - ADMIN_PASSWORD=admin123

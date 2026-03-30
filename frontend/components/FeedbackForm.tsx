@@ -4,32 +4,40 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, CheckCircle2, AlertCircle, Loader2, Sparkles } from 'lucide-react';
 
-const CATEGORIES = ['Bug', 'Feature', 'UI/UX', 'Performance', 'Other'];
+const CATEGORIES = ['Bug', 'Feature Request', 'Improvement', 'Other'];
+const MIN_CHARS = 20;
 const MAX_CHARS = 500;
 
 export default function FeedbackForm() {
     const [title, setTitle] = useState('');
+    const [showTitleError, setShowTitleError] = useState(false);
     const [category, setCategory] = useState(CATEGORIES[0]);
     const [description, setDescription] = useState('');
     const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
     const [errorMessage, setErrorMessage] = useState('');
 
+    // Title validation: No numbers or symbols
+    const isTitleValid = title.trim().length > 0 && /^[a-zA-Z\s]*$/.test(title);
+    const isDescriptionValid = description.trim().length >= MIN_CHARS && description.length <= MAX_CHARS;
+    const canSubmit = isTitleValid && isDescriptionValid && status === 'idle';
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!title || !description) return;
+        if (!canSubmit) return;
 
         setStatus('submitting');
         setErrorMessage('');
 
         try {
-            const response = await fetch('http://localhost:4000/api/feedback', {
+            const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+            const response = await fetch(`${apiBaseUrl}/api/feedback`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ title, description, category }),
             });
 
             if (!response.ok) {
-                throw new Error('Something went Error. Please try again.');
+                throw new Error('Something went wrong. Please try again.');
             }
 
             setStatus('success');
@@ -67,15 +75,33 @@ export default function FeedbackForm() {
                 <form onSubmit={handleSubmit} className="space-y-6">
                     {/* Title Input */}
                     <div>
-                        <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Title</label>
+                        <div className="flex justify-between items-end mb-2">
+                            <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider">Title</label>
+                            {showTitleError && (
+                                <span className="text-[10px] text-red-500 font-bold uppercase animate-pulse">Letters only, please</span>
+                            )}
+                        </div>
                         <input
                             type="text"
                             value={title}
-                            onChange={(e) => setTitle(e.target.value)}
+                            onChange={(e) => {
+                                const val = e.target.value;
+                                const filteredVal = val.replace(/[^a-zA-Z\s]/g, '');
+                                
+                                if (val !== filteredVal) {
+                                    setShowTitleError(true);
+                                    setTimeout(() => setShowTitleError(false), 2000);
+                                }
+                                
+                                setTitle(filteredVal);
+                            }}
                             placeholder="What's on your mind?"
-                            required
                             disabled={status === 'submitting'}
-                            className="w-full bg-zinc-800/50 border border-zinc-700/50 text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all placeholder:text-zinc-600"
+                            className={`w-full bg-zinc-800/50 border rounded-xl px-4 py-3 focus:outline-none transition-all placeholder:text-zinc-600 ${
+                                showTitleError 
+                                    ? 'border-red-500/50 focus:ring-2 focus:ring-red-500/20' 
+                                    : 'border-zinc-700/50 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50'
+                            }`}
                         />
                     </div>
 
@@ -105,18 +131,26 @@ export default function FeedbackForm() {
                     <div>
                         <div className="flex justify-between items-end mb-2">
                             <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider">Description</label>
-                            <span className={`text-[10px] font-mono ${description.length > MAX_CHARS ? 'text-red-400' : 'text-zinc-500'}`}>
+                            <span className={`text-[10px] font-mono ${
+                                description.length > 0 && description.length < MIN_CHARS || description.length > MAX_CHARS 
+                                    ? 'text-red-400' 
+                                    : 'text-zinc-500'
+                            }`}>
+                                {description.length < MIN_CHARS && description.length > 0 ? `Min ${MIN_CHARS}: ` : ''}
                                 {description.length}/{MAX_CHARS}
                             </span>
                         </div>
                         <textarea
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
-                            placeholder="Please provide as much detail as possible..."
-                            required
+                            placeholder="Please provide as much detail as possible (Min 20 characters)..."
                             rows={4}
                             disabled={status === 'submitting'}
-                            className="w-full bg-zinc-800/50 border border-zinc-700/50 text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all placeholder:text-zinc-600 resize-none"
+                            className={`w-full bg-zinc-800/50 border rounded-xl px-4 py-3 focus:outline-none transition-all placeholder:text-zinc-600 resize-none ${
+                                description.length > 0 && description.length < MIN_CHARS
+                                    ? 'border-red-500/50 focus:ring-2 focus:ring-red-500/20'
+                                    : 'border-zinc-700/50 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50'
+                            }`}
                         />
                     </div>
 
@@ -127,12 +161,12 @@ export default function FeedbackForm() {
                                 <motion.button
                                     key="submit-btn"
                                     type="submit"
-                                    disabled={status === 'submitting' || !title || !description || description.length > MAX_CHARS}
-                                    className="w-full relative group h-12 rounded-xl bg-white text-black font-bold flex items-center justify-center gap-2 overflow-hidden hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:grayscale disabled:scale-100 transition-all"
+                                    disabled={!canSubmit}
+                                    className="w-full relative group h-12 rounded-xl bg-white text-black font-bold flex items-center justify-center gap-2 overflow-hidden hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:grayscale disabled:scale-100 transition-all shadow-xl"
                                 >
                                     {status === 'submitting' ? (
                                         <div className="flex items-center gap-2">
-                                            <Loader2 className="w-5 h-5 animate-spin" />
+                                            <Loader2 className="w-5 h-5 animate-spin text-emerald-600" />
                                             <span>Analyzing Feedback...</span>
                                             {/* Pulsing AI Glow effect */}
                                             <motion.div 

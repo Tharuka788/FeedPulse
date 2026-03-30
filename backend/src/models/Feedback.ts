@@ -4,11 +4,12 @@ export interface IFeedback extends Document {
     title: string;
     description: string;
     category: string;
-    status: 'pending' | 'in-progress' | 'resolved' | 'rejected';
+    status: 'New' | 'In Review' | 'Resolved';
     aiAnalysis?: {
         sentiment: 'positive' | 'neutral' | 'negative';
         suggestedCategory: string;
         priorityScore: number;
+        tags: string[];
         summary: string;
     };
     user?: mongoose.Types.ObjectId;
@@ -22,13 +23,14 @@ const FeedbackSchema: Schema = new Schema({
     category: { type: String, required: true },
     status: { 
         type: String, 
-        enum: ['pending', 'in-progress', 'resolved', 'rejected'], 
-        default: 'pending' 
+        enum: ['New', 'In Review', 'Resolved'], 
+        default: 'New' 
     },
     aiAnalysis: {
         sentiment: { type: String, enum: ['positive', 'neutral', 'negative'] },
         suggestedCategory: { type: String },
         priorityScore: { type: Number, min: 0, max: 10 },
+        tags: [{ type: String }],
         summary: { type: String }
     },
     user: { type: Schema.Types.ObjectId, ref: 'User' },

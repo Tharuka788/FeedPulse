@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import connectDB from './config/db.js';
 import feedbackRoutes from './routes/feedbackRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api/feedback', feedbackRoutes);
+app.use('/api/auth', authRoutes);
 
 app.get('/', (req, res) => {
     res.send('FeedPulse API is running...');

@@ -1,92 +1,105 @@
-FeedPulse - AI-Powered Feedback Management System 🚀
+# 🌊 FeedPulse - AI-Powered Feedback System
 
-FeedPulse is a full-stack feedback management platform designed to capture user insights and leverage Google Gemini AI to automatically analyze sentiment, assign priority scores, and categorize feedback in real-time.
+**FeedPulse** is a modern, high-performance web application designed to capture, analyze, and prioritize user feedback using advanced AI. Built with a premium aesthetic and powered by Google Gemini, it transforms raw feedback into actionable insights for product teams.
 
-🌟 Key Features
+![FeedPulse Banner](https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1200&h=400)
 
-Public Feedback Form: Modern, responsive Dark Mode UI built with Next.js 15 and Tailwind CSS.
+## ✨ Features
 
-AI-Driven Insights: - Sentiment Analysis: Automatically detects user mood (Positive, Neutral, Negative).
+- **🤖 AI-Powered Analysis**: Automatically analyzes sentiment, suggests categories, and assigns priority scores to every feedback using Google Gemini 2.5.
+- **🛡️ Premium Admin Portal**: Secure dashboard for managing feedback with JWT authentication.
+- **📊 Real-time Monitoring**: Track incoming feedback and AI analysis progress in real-time.
+- **🎨 Modern Dark UI**: Sleek, glassmorphic design built with Framer Motion and TailwindCSS.
+- **🐳 Dockerized Deployment**: Run the entire stack (Frontend, Backend, MongoDB) with a single command.
 
-Priority Scoring: AI assigns a score from 1-10 to identify urgent issues.
+---
 
-Smart Tagging: Automatically generates relevant tags (e.g., #bug, #ui, #security).
+## 🚀 Quick Start
 
-Admin Dashboard: Secure portal for admins to manage, filter, and track feedback status.
+### Prerequisites
+- [Docker & Docker Compose](https://www.docker.com/products/docker-desktop/)
+- [Google Gemini API Key](https://aistudio.google.com/)
 
-Robust Security: Implements Input Sanitization using DOMPurify to prevent Cross-Site Scripting (XSS) attacks.
+### One-Command Setup
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Tharuka788/FeedPulse.git
+   cd FeedPulse
+   ```
+2. Start the application:
+   ```bash
+   docker compose up --build
+   ```
+3. Access the application:
+   - **User Feedback Portal**: [http://localhost:3000](http://localhost:3000)
+   - **Admin Dashboard**: [http://localhost:3000/admin/login](http://localhost:3000/admin/login)
 
-One-Click Deployment: Fully containerized using Docker and Docker Compose.
+---
 
-🛠️ Tech Stack
+## 🔐 Admin Credentials
 
-Frontend: Next.js 15, React 19, Tailwind CSS, Lucide React
+Default credentials for the Admin Dashboard (configurable in `docker-compose.yml`):
+- **Email**: `admin@feedpulse.com`
+- **Password**: `admin123`
 
-Backend: Node.js, Express.js, TypeScript
+---
 
-Database: MongoDB Atlas (Cloud) / Local MongoDB
+## 🛠️ Technology Stack
 
-AI Engine: Google Generative AI (Gemini 1.5 Flash)
+### Frontend
+- **Framework**: Next.js 15 (App Router)
+- **Styling**: TailwindCSS & Vanilla CSS
+- **Animations**: Framer Motion
+- **Icons**: Lucide React
 
-Containerization: Docker & Docker Compose
+### Backend
+- **Runtime**: Node.js (ESM)
+- **Framework**: Express.js
+- **Database**: MongoDB (Mongoose)
+- **AI Integration**: Google Generative AI (@google/generative-ai)
 
-📦 Getting Started
+---
 
-1. Prerequisites
+## ⚙️ Configuration (Environment Variables)
 
-Docker Desktop installed and running.
+### Backend (`/backend/.env`)
+| Variable | Description |
+| :--- | :--- |
+| `PORT` | Backend server port (default: 4000) |
+| `MONGO_URI` | MongoDB connection string |
+| `GEMINI_API_KEY` | Your Google AI API Key |
+| `JWT_SECRET` | Secret key for admin authentication |
+| `ADMIN_EMAIL` | Default admin email |
+| `ADMIN_PASSWORD` | Default admin password |
 
-A Google Gemini API Key (Get it from Google AI Studio).
+### Frontend (`/frontend/.env`)
+| Variable | Description |
+| :--- | :--- |
+| `NEXT_PUBLIC_API_URL` | Backend API URL (default: http://localhost:4000) |
 
-2. Environment Setup
+---
 
-Create a .env file in the root directory (and backend/ directory) with the following variables:
+## 📁 Project Structure
 
-PORT=4000
-MONGODB_URI=your_mongodb_connection_string
-GEMINI_API_KEY=your_gemini_api_key
-JWT_SECRET=your_secret_key_for_auth
-ADMIN_EMAIL=admin@feedpulse.com
-ADMIN_PASSWORD=admin123
+```text
+FeedPulse/
+├── backend/            # Express.js Server & AI Logic
+│   ├── src/
+│   │   ├── controllers/# Business logic
+│   │   ├── models/     # MongoDB schemas
+│   │   ├── services/   # Gemini AI integration
+│   │   └── routes/     # API endpoints
+│   └── Dockerfile
+├── frontend/           # Next.js Application
+│   ├── app/            # App Router (Pages)
+│   ├── components/     # UI Components
+│   └── Dockerfile
+└── docker-compose.yml  # Orchestration for all services
+```
 
+---
 
-3. Run with Docker (Recommended)
+## 📄 License
+This project is licensed under the ISC License.
 
-Launch the entire ecosystem with a single command:
-
-docker compose up --build
-
-
-Access the application:
-
-Frontend (Form): http://localhost:3000
-
-Admin Dashboard: http://localhost:3000/admin
-
-Backend API: http://localhost:4000
-
-🛡️ Security & Validations
-
-XSS Protection: All user-submitted content (Title, Description) is sanitized on the server side using isomorphic-dompurify to strip out any malicious HTML/Script tags.
-
-Form Validation: - Description must be at least 20 characters.
-
-Title and Category are strictly required.
-
-Admin Security: Protected admin routes using JWT authentication.
-
-📊 Dashboard Preview
-
-AI Analysis in action: Sentiment, Priority, and Smart Tags.
-
-Minimalist user submission form with real-time validation.
-
-👨‍💻 Author
-
-Tharuka Umayanga
-
-Project developed as part of Assignment 1 - Full Stack Development.
-
-📝 Note on Gemini API Fix
-
-Initially, there was a connectivity issue within the Docker network environment for the Gemini API. This has been resolved by correctly mapping the environment variables and ensuring the Docker container has proper outbound access to Google's API endpoints.
+Developed with ❤️ for the future of product development.

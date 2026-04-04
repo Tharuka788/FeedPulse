@@ -34,6 +34,16 @@
 
 ---
 
+## 📸 Screenshots
+
+### 💠 User Feedback Portal
+![User Feedback Portal](screenshots/feedback_portal.png.png)
+
+### 🛡️ Admin Dashboard
+![Admin Dashboard](screenshots/admin_dashboard.png.png)
+
+---
+
 ## 🔐 Admin Credentials
 
 Default credentials for the Admin Dashboard (configurable in `docker-compose.yml`):
@@ -73,7 +83,7 @@ Default credentials for the Admin Dashboard (configurable in `docker-compose.yml
 ### Frontend (`/frontend/.env`)
 | Variable | Description |
 | :--- | :--- |
-| `NEXT_PUBLIC_API_URL` | Backend API URL (default: http://localhost:4000) |
+| `NEXT_PUBLIC_API_URL` | Backend API URL (default: http://localhost:8081) |
 
 ---
 

@@ -4,9 +4,9 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "8080:3000"
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:4000
+      - NEXT_PUBLIC_API_URL=http://localhost:8081
     depends_on:
       - backend
 
@@ -15,7 +15,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     ports:
-      - "4000:4000"
+      - "8081:4000"
     environment:
       - MONGO_URI=mongodb://mongo:27017/feedpulse
       - GEMINI_API_KEY=AIzaSyDUvb1pUj4wYcGg_y8DpR8Q-2XoJn1YqXU

@@ -29,8 +29,8 @@
    docker compose up --build
    ```
 3. Access the application:
-   - **User Feedback Portal**: [http://localhost:3000](http://localhost:3000)
-   - **Admin Dashboard**: [http://localhost:3000/admin/login](http://localhost:3000/admin/login)
+   - **User Feedback Portal**: [http://localhost:8080](http://localhost:8080)
+   - **Admin Dashboard**: [http://localhost:8080/admin/login](http://localhost:8080/admin/login)
 
 ---
 

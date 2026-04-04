@@ -31,8 +31,18 @@
    docker compose up --build
    ```
 3. Access the application:
-   - **User Feedback Portal**: [http://localhost:3000](http://localhost:3000)
-   - **Admin Dashboard**: [http://localhost:3000/admin/login](http://localhost:3000/admin/login)
+   - **User Feedback Portal**: [http://localhost:8080](http://localhost:8080)
+   - **Admin Dashboard**: [http://localhost:8080/admin/login](http://localhost:8080/admin/login)
+
+---
+
+## 📸 Screenshots
+
+### 💠 User Feedback Portal
+![User Feedback Portal](screenshots/feedback_portal.png.png)
+
+### 🛡️ Admin Dashboard
+![Admin Dashboard](screenshots/admin_dashboard.png.png)
 
 ---
 
@@ -75,7 +85,7 @@ Default credentials for the Admin Dashboard (configurable in `docker-compose.yml
 ### Frontend (`/frontend/.env`)
 | Variable | Description |
 | :--- | :--- |
-| `NEXT_PUBLIC_API_URL` | Backend API URL (default: http://localhost:4000) |
+| `NEXT_PUBLIC_API_URL` | Backend API URL (default: http://localhost:8081) |
 
 ---
 

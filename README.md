@@ -2,8 +2,6 @@
 
 **FeedPulse** is a modern, high-performance web application designed to capture, analyze, and prioritize user feedback using advanced AI. Built with a premium aesthetic and powered by Google Gemini, it transforms raw feedback into actionable insights for product teams.
 
-![FeedPulse Banner](https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1200&h=400)
-
 ## ✨ Features
 
 - **🤖 AI-Powered Analysis**: Automatically analyzes sentiment, suggests categories, and assigns priority scores to every feedback using Google Gemini 2.5.
